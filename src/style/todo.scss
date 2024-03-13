@@ -1,0 +1,41 @@
+.management-wrapper {
+  display: flex;
+  column-gap: 20px;
+  justify-content: space-between;
+  padding: 10px 0;
+
+  * {
+    width: 100%;
+  }
+
+  .form-add {
+    display: flex;
+    min-width: 250px;
+  }
+}
+
+.search-wrapper {
+  display: flex;
+  column-gap: 20px;
+  justify-content: space-between;
+  padding: 10px 0;
+
+  * {
+    width: 100%;
+  }
+}
+
+.btn {
+  border: none;
+  background-color: rgb(174, 174, 174);
+  border: 2px solid transparent;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+
+  &:active {
+    border: 2px solid rgb(86, 86, 86);
+  }
+}

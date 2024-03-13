@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="script/index.js"></script>
+    <link rel="stylesheet" href="./style/reset.scss" />
+    <link rel="stylesheet" href="./style/todo.scss" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="management-wrapper">
+        <button class="btn deleteAll-btn">Delete All</button>
+        <button class="btn deleteLast-btn">Delete Last</button>
+        <form class="form-add">
+          <input type="text" class="form-add__input" />
+          <button type="submit" class="form-add__submit btn">Add</button>
+        </form>
+      </div>
+      <div class="search-wrapper">
+        <p class="statistics__all">All:</p>
+        <p class="statistics__done">Done:</p>
+        <button class="btn showAll-btn">Show all</button>
+        <button class="btn showDone-btn">Show done</button>
+        <input type="text" class="search__input input" />
+      </div>
+      <div class="list-wrapper">
+        <div class="todo-elemnt">
+          <button class="element__status btn"></button>
+          <p class="element__content"></p>
+          <button class="element__delete btn"></button>
+          <p class="element__date"></p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
