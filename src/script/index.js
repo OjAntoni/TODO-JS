@@ -1,16 +1,17 @@
 const body = document.body;
-const todos = [];
-let allCount = 0;
-let doneCount = 0;
+let todos = [];
 
-const updateStatistics = (all, done) => {
+const updateStatistics = () => {
+  let allCount = todos.length;
+  let doneCount = todos.filter((item) => item.state === "Done").length;
+
   let allElement = body.querySelector(".statistics__all");
   let allDoneElement = body.querySelector(".statistics__done");
   allElement.textContent = `All: ${allCount}`;
   allDoneElement.textContent = `Done: ${doneCount}`;
 };
 
-updateStatistics(allCount, doneCount);
+updateStatistics();
 
 const form = body.querySelector(".form-add");
 form.addEventListener("submit", (event) => {
@@ -26,11 +27,10 @@ const addTodo = (text) => {
     id: Math.trunc(Math.random() * 1000),
     content: text,
     date: new Date(),
-    state: "new",
+    state: "New",
   };
-  todos.push(newTodo);
-  allCount = allCount + 1;
-  updateStatistics(allCount, doneCount);
+  todos.unshift(newTodo);
+  updateStatistics();
   let wrapper = body.querySelector(".list-wrapper");
   wrapper.prepend(createTodoElement(newTodo));
 };
@@ -38,14 +38,18 @@ const addTodo = (text) => {
 const createTodoElement = ({ id, content, date, state }) => {
   const todoElement = document.createElement("div");
   todoElement.classList.add("todo-element");
-  todoElement.id = id;
+  todoElement.id = `_${id}`;
 
   const statusButton = document.createElement("button");
   statusButton.classList.add("element__status", "btn");
   statusButton.textContent = state;
   statusButton.addEventListener("click", () => {
     statusButton.textContent = "Done";
-    updateStatistics(allCount, ++doneCount);
+    let index = todos.findIndex((e) => e.id === id);
+    if (index >= 0) {
+      todos[index]["state"] = "Done";
+      updateStatistics();
+    }
   });
 
   const contentP = document.createElement("p");
@@ -60,7 +64,7 @@ const createTodoElement = ({ id, content, date, state }) => {
     if (index >= 0) {
       todos.splice(index, 1);
       todoElement.remove();
-      updateStatistics(--allCount, --doneCount);
+      updateStatistics();
     }
   });
 
@@ -76,4 +80,57 @@ const createTodoElement = ({ id, content, date, state }) => {
   return todoElement;
 };
 
-const statusBtn = body.querySelector(".element__status");
+const deleteAll = () => {
+  elems = body.querySelectorAll(".todo-element");
+  elems.forEach((elem) => elem.remove());
+
+  todos = [];
+  updateStatistics();
+};
+
+let deleteAllBtn = body.querySelector(".deleteAll-btn");
+deleteAllBtn.addEventListener("click", deleteAll);
+
+const deleteLast = () => {
+  if (todos.length) {
+    let sortedArray = structuredClone(todos).sort((a, b) => b.date - a.date);
+    todos = todos.filter((item) => item.id !== sortedArray[0].id);
+    body.querySelector(`#_${sortedArray[0].id}`).remove();
+    updateStatistics();
+    console.log(sortedArray[0].id);
+  }
+};
+
+let deleteLastBtn = body.querySelector(".deleteLast-btn");
+deleteLastBtn.addEventListener("click", deleteLast);
+
+const showAll = () => {
+  let wrapper = body.querySelector(".list-wrapper");
+  wrapper.innerHTML = "";
+  todos.forEach((todo) => wrapper.append(createTodoElement(todo)));
+};
+let showAllBtn = body.querySelector(".showAll-btn");
+showAllBtn.addEventListener("click", showAll);
+
+const showDone = () => {
+  let wrapper = body.querySelector(".list-wrapper");
+  wrapper.innerHTML = "";
+  todos
+    .filter((item) => item.state === "Done")
+    .forEach((todo) => wrapper.append(createTodoElement(todo)));
+};
+let showAllDoneBtn = body.querySelector(".showDone-btn");
+showAllDoneBtn.addEventListener("click", showDone);
+
+const searchTodos = () => {
+  console.log("here");
+  let wrapper = body.querySelector(".list-wrapper");
+  wrapper.innerHTML = "";
+  let searchInput = body.querySelector(".search__input");
+  todos
+    .filter((todo) => todo.content.includes(searchInput.value))
+    .forEach((todo) => wrapper.append(createTodoElement(todo)));
+};
+
+let searchInput = body.querySelector(".search__input");
+searchInput.addEventListener("input", searchTodos);
