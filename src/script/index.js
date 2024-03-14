@@ -70,7 +70,7 @@ const createTodoElement = ({ id, content, date, state }) => {
 
   const dateP = document.createElement("p");
   dateP.classList.add("element__date");
-  dateP.textContent = date;
+  dateP.textContent = `${date.getHours()}:${date.getMinutes()}`;
 
   todoElement.appendChild(statusButton);
   todoElement.appendChild(contentP);
