@@ -1,7 +1,32 @@
 const body = document.body;
 let todos = [];
 
+window.addEventListener("load", () => {
+  let items = JSON.parse(localStorage.getItem("todos")) || [];
+
+  items = items.map((item) => {
+    item.date = new Date(item.date);
+    return item;
+  });
+  todos = items;
+
+  console.log(items);
+  todos.forEach((item) => {
+    // console.log({ ...item, date: new Date(item.date) });
+    let wrapper = body.querySelector(".list-wrapper");
+    wrapper.append(createTodoElement(item));
+  });
+});
+
+window.addEventListener("beforeunload", () => {
+  localStorage.setItem(
+    "todos",
+    !todos || todos.length == 0 ? null : JSON.stringify(todos)
+  );
+});
+
 const updateStatistics = () => {
+  console.log(todos);
   let allCount = todos.length;
   let doneCount = todos.filter((item) => item.state === "Done").length;
 
